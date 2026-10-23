@@ -14,8 +14,10 @@ agree = st.sidebar.checkbox("show DataSet Overview ?")
 if agree:
     st.dataframe(Penguin_data)
 
-selected_town = st.sidebar.radio("Selecciona species",
-Penguin_data['species'].unique())
+species = st.sidebar.radio("species", Penguin_data['species'].unique())
+st.sidebar.write("Select:", species)
+
+
 
 optionals = st.sidebar.expander("Optional Configurations", True)
 fare_min = optionals.slider(
@@ -38,6 +40,49 @@ st.pyplot(fig)
 st.markdown("___")
 
 
+Penguin_data = pd.read_csv(
+    "https://raw.githubusercontent.com/marii1912/ciencia-datos/refs/heads/main/Penguin%20Species.csv"
+)
+
+fig, ax = plt.subplots()
+
+ax.scatter(
+    Penguin_data["culmen_length_mm"],
+    Penguin_data["culmen_depth_mm"],
+    color="blue"
+)
+
+ax.set_xlabel("Largo del pico (mm)")
+ax.set_ylabel("Profundidad del pico (mm)")
+ax.set_title("Largo vs profundidad del pico")
+
+st.header("Gráfica de dispersión")
+st.pyplot(fig)
+st.markdown("___")
+
+
+# Gráfica de pastel: largo de la aleta
+fig, ax = plt.subplots()
+
+flipper_categories = pd.cut(
+    Penguin_data["flipper_length_mm"],
+    bins=4,
+    labels=["Aletas cortas", "Aletas medianas", "Aletas largas", "Aletas muy largas"]
+)
+
+flipper_categories.value_counts().plot.pie(
+    autopct="%1.1f%%",
+    colors=["lightblue", "skyblue", "royalblue", "navy"],
+    ax=ax
+)
+
+ax.set_title("Distribución del largo de las aletas")
+ax.set_ylabel("")
+
+st.header("Gráfica de pastel")
+st.pyplot(fig)
+st.markdown("___")
+
 
 
 map_data = pd.DataFrame(
@@ -48,3 +93,5 @@ st.title("Cordoba 🙂")
 st.header("Using Streamlit and Mapbox")
 
 st.map(map_data)
+
+
